@@ -1,13 +1,55 @@
-\documentclass[10pt]{article}
-\usepackage{fullpage, graphicx, url}
-\setlength{\parskip}{1ex}
-\setlength{\parindent}{0ex}
+\documentclass[9pt]{article}
+
+%hide links
+\usepackage[hidelinks]{hyperref}
+%graphics
+\usepackage[dvipsnames,svgnames]{xcolor}
+\usepackage[pdftex]{graphicx}
+%page size & margins
+\usepackage{geometry}
+\geometry{
+  papersize={105mm,148.5mm},
+  left=7mm,
+  right=7mm,
+  bottom=12mm,
+  top=6mm
+}
+%fancy headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+%copyleft symbol
+\usepackage{textcomp}
+
 \title{ Haml Documentation }
 \begin{document}
 
+\begin{titlepage}
+\pagestyle{plain}
+\begin{center}
+\vspace*{0.3\textheight}
+\includegraphics[\textwidth]{/home/roberto/Documentos/e-dit/HAML/haml.png}\\[5pt]
+\vfill
+\end{center}
+\end{titlepage}
+
+\pagenumbering{Roman}
+\tableofcontents
+
+\newpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
 
  Haml is a markup language that’s used to cleanly and simply describe the HTML of any web document, without the use of inline code. Haml functions as a replacement for inline page templating systems such as PHP, ERB, and ASP. However, Haml avoids the need for explicitly coding HTML into the template, because it is actually an abstract description of the HTML, with some code to generate dynamic content.
-\subsection*{Features}
+\section{Features}
 \begin{itemize}
 \item Whitespace active
 \item Well-formatted markup
@@ -17,7 +59,7 @@
 \item Implements Rails templates with the .haml extension
 
 \end{itemize}
-\subsection*{Using Haml}
+\section{Using Haml}
 
 
  Haml can be used in three ways:
@@ -81,7 +123,7 @@ end
   </div>
 </div>
 \end{verbatim}
-\subsubsection*{Rails XSS Protection}
+\subsection{Rails XSS Protection}
 
 
  Haml supports Rails’ XSS protection scheme, which was introduced in Rails 2.3.5+ and is enabled by default in 3.0.0+. If it’s enabled, Haml’s :escape\_html option is set to true by default - like in ERB, all strings printed to a Haml template are escaped by default. Also like ERB, strings marked as HTML safe are not escaped. Haml also has its own syntax for printing a raw string to the template.
@@ -91,7 +133,7 @@ end
 
 
  Finally, all the Haml helpers that return strings that are known to be HTML safe are marked as such. In addition, string input is escaped unless it’s HTML safe.
-\subsubsection*{Ruby Module}
+\subsection{Ruby Module}
 
 
  Haml can also be used completely separately from Rails and ActionView. To do this, install the gem with RubyGems:
@@ -105,7 +147,7 @@ gem install haml
 engine = Haml::Engine.new("%p Haml code!")
 engine.render #=> "<p>Haml code!</p>\n"
 \end{verbatim}
-\subsubsection*{Options}
+\subsection{Options}
 
 
  Haml understands various configuration options that affect its performance and output.
@@ -125,7 +167,7 @@ Haml::Options.defaults[:format] = :html5
 
 
  Finally, you can also set them by passing an options hash to Haml::Engine\#initialize. For the complete list of available options, please see Haml::Options.
-\subsubsection*{Encodings}
+\subsection{Encodings}
 
 
  When using Ruby 1.9 or later, Haml supports the same sorts of encoding-declaration comments that Ruby does. Although both Ruby and Haml support several different styles, the easiest it just to add -\# coding: encoding-name at the beginning of the Haml template (it must come before all other lines). This will tell Haml that the template is encoded using the named encoding.
@@ -135,7 +177,7 @@ Haml::Options.defaults[:format] = :html5
 
 
  Note that, like Ruby, Haml does not support templates encoded in UTF-16 or UTF-32, since these encodings are not compatible with ASCII. It is possible to use these as the output encoding, though.
-\subsection*{Plain Text}
+\section{Plain Text}
 
 
  A substantial portion of any HTML document is its content, which is plain old text. Any Haml line that’s not interpreted as something else is taken to be plain text, and passed through unmodified. For example:
@@ -169,7 +211,7 @@ Haml::Options.defaults[:format] = :html5
   <div id="blah">Blah!</div>
 </p>
 \end{verbatim}
-\subsubsection*{Escaping: $\backslash$}
+\subsection{Escaping: $\backslash$}
 
 
  The backslash character escapes the first character of a line, allowing use of otherwise interpreted characters as plain text. For example:
@@ -187,8 +229,8 @@ Haml::Options.defaults[:format] = :html5
   = @title
 </title>
 \end{verbatim}
-\subsection*{HTML Elements}
-\subsubsection*{Element Name: \%}
+\section{HTML Elements}
+\subsection{Element Name: \%}
 
 
  The percent character is placed at the beginning of a line. It’s followed immediately by the name of an element, then optionally by modifiers (see below), a space, and text to be rendered inside the element. It creates an element in the form of $<$element$>$$<$/element$>$. For example:
@@ -210,7 +252,7 @@ Haml::Options.defaults[:format] = :html5
 
 
  Any string is a valid element name; Haml will automatically generate opening and closing tags for any element.
-\subsubsection*{Attributes: \{\} or ()}
+\subsection{Attributes: \{\} or ()}
 
 
  Brackets represent a Ruby hash that is used for specifying the attributes of an element. It is literally evaluated as a Ruby hash, so logic will work in it and local variables may be used. Quote characters within the attribute will be replaced by appropriate escape sequences. The hash is placed after the tag is defined. For example:
@@ -439,7 +481,7 @@ end
 \begin{verbatim}
 <a data-author_id='123' href='/posts'>Posts By Author</a>
 \end{verbatim}
-\subsubsection*{Class and ID: . and \#}
+\subsection{Class and ID: . and \#}
 
 
  The period and pound sign are borrowed from CSS. They are used as shortcuts to specify the class and id attributes of an element, respectively. Multiple class names can be specified in a similar way to CSS, by chaining the class names together with periods. They are placed immediately after the tag and before an attributes hash. For example:
@@ -529,7 +571,7 @@ end
   </div>
 </div>
 \end{verbatim}
-\subsubsection*{Self-Closing Tags: /}
+\subsection{Self-Closing Tags: /}
 
 
  The forward slash character, when placed at the end of a tag definition, causes the tag to be self-closed. For example:
@@ -558,7 +600,7 @@ end
 <br />
 <meta http-equiv='Content-Type' content='text/html' />
 \end{verbatim}
-\subsubsection*{Whitespace Removal: $>$ and $<$}
+\subsection{Whitespace Removal: $>$ and $<$}
 
 
  $>$ and $<$ give you more control over the whitespace near a tag. $>$ will remove all whitespace surrounding a tag, while $<$ will remove all whitespace immediately within a tag. You can think of them as alligators eating the whitespace: $>$ faces out of the tag and eats the whitespace on the outside, and $<$ faces into the tag and eats the whitespace on the inside. They’re placed at the end of a tag definition, after class, id, and attribute declarations but before / or =. For example:
@@ -619,7 +661,7 @@ Bar</p>
 <img /><pre>foo
 bar</pre><img />
 \end{verbatim}
-\subsubsection*{Object Reference: []}
+\subsection{Object Reference: []}
 
 
  Square brackets follow a tag definition and contain a Ruby object that is used to set the class and id of that tag. The class is set to the object’s class (transformed to use underlines rather than camel case) and the id is set to the object’s class, followed by the value of its \#to\_key or \#id method (in that order). This is most useful for elements that represent instances of Active Model models. Additionally, the second argument (if present) will be used as a prefix for both the id and class attributes. For example:
@@ -670,7 +712,7 @@ end
   Hello!
 </div>
 \end{verbatim}
-\subsection*{Doctype: !!!}
+\section{Doctype: !!!}
 
 
  When describing HTML documents with Haml, you can have a document type or XML prolog generated automatically by including the characters !!!. For example:
@@ -753,11 +795,11 @@ $<$!DOCTYPE html PUBLIC ``-//W3C//DTD HTML 4.01 Frameset//EN'' ``\url{http://www
 
 
  If the mime\_type of the template being rendered is text/xml then a format of :xhtml will be used even if the global output format is set to :html4 or :html5.
-\subsection*{Comments}
+\section{Comments}
 
 
  Haml supports two sorts of comments: those that show up in the HTML output and those that don’t.
-\subsubsection*{HTML Comments: /}
+\subsection{HTML Comments: /}
 
 
  The forward slash character, when placed at the beginning of a line, wraps all text after it in an HTML comment. For example:
@@ -814,7 +856,7 @@ $<$!DOCTYPE html PUBLIC ``-//W3C//DTD HTML 4.01 Frameset//EN'' ``\url{http://www
   </a>
 <![endif]-->
 \end{verbatim}
-\subsubsection*{Haml Comments: -\#}
+\subsection{Haml Comments: -\#}
 
 
  The hyphen followed immediately by the pound sign signifies a silent comment. Any text following this isn’t rendered in the resulting document at all.
@@ -851,8 +893,8 @@ $<$!DOCTYPE html PUBLIC ``-//W3C//DTD HTML 4.01 Frameset//EN'' ``\url{http://www
 <p>foo</p>
 <p>bar</p>
 \end{verbatim}
-\subsection*{Ruby Evaluation}
-\subsubsection*{Inserting Ruby: =}
+\section{Ruby Evaluation}
+\subsection{Inserting Ruby: =}
 
 
  The equals character is followed by Ruby code. This code is evaluated and the output is inserted into the document. For example:
@@ -905,7 +947,7 @@ $<$!DOCTYPE html PUBLIC ``-//W3C//DTD HTML 4.01 Frameset//EN'' ``\url{http://www
 
 
  Note that it’s illegal to nest code within a tag that ends with =.
-\subsubsection*{Running Ruby: -}
+\subsection{Running Ruby: -}
 
 
  The hyphen character is also followed by Ruby code. This code is evaluated but \emph{not}
@@ -980,7 +1022,7 @@ $<$!DOCTYPE html PUBLIC ``-//W3C//DTD HTML 4.01 Frameset//EN'' ``\url{http://www
   2?
 </p>
 \end{verbatim}
-\subsubsection*{Whitespace Preservation: ~}
+\subsection{Whitespace Preservation: ~}
 
 
  ~ works just like =, except that it runs Haml::Helpers\#find\_and\_preserve on its input. For example,
@@ -1003,7 +1045,7 @@ Foo
 
 
  See also Whitespace Preservation.
-\subsubsection*{Ruby Interpolation: \#\{\}}
+\subsection{Ruby Interpolation: \#\{\}}
 
 
  Ruby code can also be interpolated within plain text using \#\{\}, similarly to Ruby string interpolation. For example,
@@ -1060,7 +1102,7 @@ Foo
   //]]>
 </script>
 \end{verbatim}
-\subsubsection*{Escaping HTML: \&=}
+\subsection{Escaping HTML: \&=}
 
 
  An ampersand followed by one or two equals characters evaluates Ruby code just like the equals without the ampersand, but sanitizes any HTML-sensitive characters in the result of the code. For example:
@@ -1088,7 +1130,7 @@ I like cheese &amp; crackers
 \begin{verbatim}
 I like cheese &amp; crackers
 \end{verbatim}
-\subsubsection*{Unescaping HTML: !=}
+\subsection{Unescaping HTML: !=}
 
 
  An exclamation mark followed by one or two equals characters evaluates Ruby code just like the equals would, but never sanitizes the HTML.
@@ -1118,7 +1160,7 @@ I feel <strong>!
 \begin{verbatim}
 I feel <strong>!
 \end{verbatim}
-\subsection*{Filters}
+\section{Filters}
 
 
  The colon character designates a filter. This allows you to pass an indented block of text as input to another filtering program and add the result to the output of Haml. The syntax is simply a colon followed by the name of the filter. For example:
@@ -1174,77 +1216,77 @@ Tilt.prefer Tilt::RedCarpetTemplate
 
 
  Haml comes with the following filters defined:
-\subsubsection*{:cdata}
+\subsection{:cdata}
 
 
  Surrounds the filtered text with CDATA tags.
-\subsubsection*{:coffee}
+\subsection{:coffee}
 
 
  Compiles the filtered text to Javascript using Cofeescript. You can also reference this filter as :coffeescript. This filter is implemented using Tilt.
-\subsubsection*{:css}
+\subsection{:css}
 
 
  Surrounds the filtered text with $<$style$>$ and (optionally) CDATA tags. Useful for including inline CSS. Use the :cdata option to control when CDATA tags are added.
-\subsubsection*{:erb}
+\subsection{:erb}
 
 
  Parses the filtered text with ERb, like an RHTML template. Not available if the :suppress\_eval option is set to true. Embedded Ruby code is evaluated in the same context as the Haml template. This filter is implemented using Tilt.
-\subsubsection*{:escaped}
+\subsection{:escaped}
 
 
  Works the same as plain, but HTML-escapes the text before placing it in the document.
-\subsubsection*{:javascript}
+\subsection{:javascript}
 
 
  Surrounds the filtered text with $<$script$>$ and (optionally) CDATA tags. Useful for including inline Javascript. Use the :cdata option to control when CDATA tags are added.
-\subsubsection*{:less}
+\subsection{:less}
 
 
  Parses the filtered text with Less to produce CSS output. This filter is implemented using Tilt.
-\subsubsection*{:markdown}
+\subsection{:markdown}
 
 
  Parses the filtered text with Markdown. This filter is implemented using Tilt.
-\subsubsection*{:maruku}
+\subsection{:maruku}
 
 
  Parses the filtered text with Maruku, which has some non-standard extensions to Markdown.
 
 
  As of Haml 4.0, this filter is defined in Haml contrib but is loaded automatically for historical reasons. In future versions of Haml it will likely not be loaded by default. This filter is implemented using Tilt.
-\subsubsection*{:plain}
+\subsection{:plain}
 
 
  Does not parse the filtered text. This is useful for large blocks of text without HTML tags, when you don’t want lines starting with . or - to be parsed.
-\subsubsection*{:preserve}
+\subsection{:preserve}
 
 
  Inserts the filtered text into the template with whitespace preserved. preserved blocks of text aren’t indented, and newlines are replaced with the HTML escape code for newlines, to preserve nice-looking output. See also Whitespace Preservation.
-\subsubsection*{:ruby}
+\subsection{:ruby}
 
 
  Parses the filtered text with the normal Ruby interpreter. All output sent to \$stdout, like with puts, is output into the Haml document. Not available if the :suppress\_eval option is set to true. The Ruby code is evaluated in the same context as the Haml template.
-\subsubsection*{:sass}
+\subsection{:sass}
 
 
  Parses the filtered text with Sass to produce CSS output. This filter is implemented using Tilt.
-\subsubsection*{:scss}
+\subsection{:scss}
 
 
  Parses the filtered text with Sass like the :sass filter, but uses the newer SCSS syntax to produce CSS output. This filter is implemented using Tilt.
-\subsubsection*{:textile}
+\subsection{:textile}
 
 
  Parses the filtered text with Textile. Only works if RedCloth is installed.
 
 
  As of Haml 4.0, this filter is defined in Haml contrib but is loaded automatically for historical reasons. In future versions of Haml it will likely not be loaded by default. This filter is implemented using Tilt.
-\subsubsection*{Custom Filters}
+\subsection{Custom Filters}
 
 
  You can also define your own filters. See Haml::Filters for details.
-\subsection*{Multiline: |}
+\section{Multiline: |}
 
 
  The pipe character designates a multiline string. It’s placed at the end of a line (after some whitespace) and means that all following lines that end with | will be evaluated as though they were on the same line. \textbf{Note that even the last line in the multiline block should end with |.}
@@ -1277,7 +1319,7 @@ Tilt.prefer Tilt::RedCarpetTemplate
 
 
  In addition, sometimes you need to call Ruby methods or declare data structures that just need a lot of template information. So data structures and functions that require lots of arguments can be wrapped over multiple lines, as long as each line but the last ends in a comma (see Inserting Ruby).
-\subsection*{Whitespace Preservation}
+\section{Whitespace Preservation}
 
 
  Sometimes you don’t want Haml to indent all your text. For example, tags like pre and textarea are whitespace-sensitive; indenting the text makes them render wrong.
@@ -1290,9 +1332,10 @@ Tilt.prefer Tilt::RedCarpetTemplate
 
 
  Blocks of literal text can be preserved using the :preserve filter.
-\subsection*{Helpers}
+\section{Helpers}
 
 
  Haml offers a bunch of helpers that are useful for doing stuff like preserving whitespace, creating nicely indented output for user-defined helpers, and other useful things. The helpers are all documented in the Haml::Helpers and Haml::Helpers::ActionViewExtensions modules.
  Generated on Thu Mar 21 01:39:20 2013 by yard 0.8.4.1 (ruby-1.9.3). 
+
 \end{document}
